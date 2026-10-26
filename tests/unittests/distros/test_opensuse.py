@@ -1,14 +1,13 @@
 # This file is part of cloud-init. See LICENSE file for license information.
 
-from typing import Any
 from unittest import mock
 
-from cloudinit import distros
+from cloudinit.distros.opensuse import Distro
 
 
 @mock.patch("cloudinit.distros.opensuse.subp.subp")
 class TestPackageCommands:
-    distro: Any = distros.fetch("opensuse")("opensuse", {}, None)
+    distro: Distro = Distro("opensuse", {}, None)
 
     @mock.patch(
         "cloudinit.distros.opensuse.util.get_mount_info",
@@ -261,9 +260,8 @@ class TestPackageCommands:
         # Reset state
         self.distro.update_method = None
 
-        result = self.distro.package_command("upgrade")
+        self.distro.package_command("upgrade")
         assert self.distro.read_only_root
-        assert result is None
         assert not m_subp.called
 
     @mock.patch(
@@ -304,10 +302,9 @@ class TestPackageCommands:
         # Reset state
         self.distro.update_method = None
 
-        result = self.distro.package_command("upgrade")
+        self.distro.package_command("upgrade")
         assert self.distro.update_method == "zypper"
         assert self.distro.read_only_root
-        assert result is None
         assert not m_subp.called
 
     @mock.patch(

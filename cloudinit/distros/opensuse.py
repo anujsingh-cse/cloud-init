@@ -46,12 +46,14 @@ class Distro(distros.Distro):
     }
 
     def __init__(
-        self, name: str, cfg: Dict[str, Any], paths: "helpers.Paths"
+        self,
+        name: str,
+        cfg: Dict[str, Any],
+        paths: Optional[helpers.Paths],
     ) -> None:
         distros.Distro.__init__(self, name, cfg, paths)
         self._runner = helpers.Runners(paths)
         self.osfamily = "suse"
-        # None until _set_update_method decides: "zypper" or "transactional".
         self.update_method: Optional[str] = None
         self.read_only_root = False
         cfg["ssh_svcname"] = "sshd"
@@ -85,7 +87,7 @@ class Distro(distros.Distro):
             pkgs = []
 
         self._set_update_method()
-        if self.read_only_root and self.update_method != "transactional":
+        if self.read_only_root and not self.update_method == "transactional":
             LOG.error(
                 "Package operation requested but read only root "
                 "without btrfs and transactional-updata"
