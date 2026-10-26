@@ -6,7 +6,7 @@ import datetime
 import json
 import logging
 from base64 import b64decode
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple, Type
 
 from cloudinit import distros, dmi, helpers, net, sources, url_helper, util
 from cloudinit.distros import ug_util
@@ -190,7 +190,7 @@ class DataSourceGCE(sources.DataSource):
         public_keys_data = self.metadata["public-keys-data"]
         return _parse_public_keys(public_keys_data, self.default_user)
 
-    def publish_host_keys(self, hostkeys: List[Any]) -> None:
+    def publish_host_keys(self, hostkeys: List[Tuple[str, str]]) -> None:
         for key in hostkeys:
             _write_host_key_to_guest_attributes(*key)
 
@@ -401,7 +401,7 @@ datasources = [
 
 
 # Return a list of data sources that match this set of dependencies.
-def get_datasource_list(depends: List[str]) -> List[Any]:
+def get_datasource_list(depends: List[str]) -> List[Type[sources.DataSource]]:
     return sources.list_from_depends(depends, datasources)
 
 
