@@ -16,10 +16,10 @@ logger = logging.getLogger(__name__)
 class ConfigFile(ConfigSource, dict):
     """ConfigFile module to load the content from a specified source."""
 
-    def __init__(self, filename):
+    def __init__(self, filename: str) -> None:
         self._loadConfigFile(filename)
 
-    def _insertKey(self, key, val):
+    def _insertKey(self, key: str, val: str) -> None:
         """
         Inserts a Key Value pair.
 
@@ -44,7 +44,7 @@ class ConfigFile(ConfigSource, dict):
 
         self[key] = val
 
-    def _loadConfigFile(self, filename):
+    def _loadConfigFile(self, filename: str) -> None:
         """
         Parses properties from the specified config file.
 
@@ -72,7 +72,7 @@ class ConfigFile(ConfigSource, dict):
             for key, value in config.items(category):
                 self._insertKey(category + "|" + key, value)
 
-    def get_count_with_prefix(self, prefix):
+    def get_count_with_prefix(self, prefix: str) -> int:
         """
         Return the total count of keys that start with the specified prefix.
 
